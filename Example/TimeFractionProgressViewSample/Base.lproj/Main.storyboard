@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="TimeFractionProgressViewSample" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
+                        <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="unw-05-Hmx" customClass="TimeFractionProgressView" customModule="TimeFractionProgressViewSample" customModuleProvider="target">
+                                <rect key="frame" x="30" y="335" width="540" height="10"/>
+                                <color key="backgroundColor" white="0.89771412037037024" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="10" id="MFX-Qo-qV8"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zJZ-nW-rlk">
+                                <rect key="frame" x="30" y="385" width="60" height="60"/>
+                                <color key="backgroundColor" red="0.20392156862745098" green="0.59607843137254901" blue="0.85882352941176465" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="IFR-J8-CtC"/>
+                                    <constraint firstAttribute="width" constant="60" id="adm-2R-Bji"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <inset key="titleEdgeInsets" minX="3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="-3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="0.0" image="play">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="pause"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="buttonTouched:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="oay-NG-m1v"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cFL-P6-JYp">
+                                <rect key="frame" x="270" y="385" width="60" height="60"/>
+                                <color key="backgroundColor" red="0.1803921568627451" green="0.80000000000000004" blue="0.44313725490196076" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="DrV-cR-efd"/>
+                                    <constraint firstAttribute="height" constant="60" id="y7A-fl-9BZ"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="-3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="0.0" image="play">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="pause"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="buttonTouched:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Qu8-Ht-hgP"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fiV-On-5fv">
+                                <rect key="frame" x="510" y="385" width="60" height="60"/>
+                                <color key="backgroundColor" red="0.82745098039215681" green="0.32941176470588235" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="3cN-pA-z5W"/>
+                                    <constraint firstAttribute="height" constant="60" id="zkI-kj-kRN"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <inset key="imageEdgeInsets" minX="-3" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="0.0" image="play">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="selected" image="pause"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="buttonTouched:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="zVF-lH-Wkv"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahe-It-j2m" customClass="TimeFractionProgressView" customModule="TimeFractionProgressViewSample" customModuleProvider="target">
+                                <rect key="frame" x="200" y="95" width="200" height="200"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TsB-PD-NZB">
+                                        <rect key="frame" x="10" y="10" width="180" height="180"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="90"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.89771412039999998" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="TsB-PD-NZB" firstAttribute="top" secondItem="ahe-It-j2m" secondAttribute="top" constant="10" id="Cmf-Gw-6e8"/>
+                                    <constraint firstAttribute="width" constant="200" id="Gaz-tc-LaY"/>
+                                    <constraint firstAttribute="trailing" secondItem="TsB-PD-NZB" secondAttribute="trailing" constant="10" id="c08-I2-88V"/>
+                                    <constraint firstAttribute="bottom" secondItem="TsB-PD-NZB" secondAttribute="bottom" constant="10" id="cf5-6j-bEd"/>
+                                    <constraint firstAttribute="height" constant="200" id="dgl-kI-1V0"/>
+                                    <constraint firstItem="TsB-PD-NZB" firstAttribute="leading" secondItem="ahe-It-j2m" secondAttribute="leading" constant="10" id="rcP-w9-W84"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="100"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="ahe-It-j2m" secondAttribute="centerX" id="HSS-E7-fkX"/>
+                            <constraint firstAttribute="centerY" secondItem="unw-05-Hmx" secondAttribute="centerY" constant="-40" id="I8y-M2-fGS"/>
+                            <constraint firstItem="fiV-On-5fv" firstAttribute="trailing" secondItem="unw-05-Hmx" secondAttribute="trailing" id="MHZ-YK-8FX"/>
+                            <constraint firstAttribute="trailing" secondItem="unw-05-Hmx" secondAttribute="trailing" constant="30" id="bEw-59-SU9"/>
+                            <constraint firstItem="zJZ-nW-rlk" firstAttribute="leading" secondItem="unw-05-Hmx" secondAttribute="leading" id="coU-6G-dNa"/>
+                            <constraint firstItem="unw-05-Hmx" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="30" id="e7h-g1-fc4"/>
+                            <constraint firstItem="unw-05-Hmx" firstAttribute="top" secondItem="ahe-It-j2m" secondAttribute="bottom" constant="40" id="f6j-gU-5Fi"/>
+                            <constraint firstAttribute="centerX" secondItem="cFL-P6-JYp" secondAttribute="centerX" id="n0V-ar-ZvR"/>
+                            <constraint firstItem="cFL-P6-JYp" firstAttribute="top" secondItem="unw-05-Hmx" secondAttribute="bottom" constant="40" id="n1n-1n-Yv2"/>
+                            <constraint firstItem="fiV-On-5fv" firstAttribute="top" secondItem="unw-05-Hmx" secondAttribute="bottom" constant="40" id="q7z-PP-zwW"/>
+                            <constraint firstItem="zJZ-nW-rlk" firstAttribute="top" secondItem="unw-05-Hmx" secondAttribute="bottom" constant="40" id="tYA-zl-4jK"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="button1" destination="zJZ-nW-rlk" id="ixy-mO-Xa5"/>
+                        <outlet property="button2" destination="cFL-P6-JYp" id="hwA-Z3-KKS"/>
+                        <outlet property="button3" destination="fiV-On-5fv" id="F6p-lj-DV5"/>
+                        <outlet property="customProgressView" destination="ahe-It-j2m" id="AtI-bK-fuh"/>
+                        <outlet property="defaultProgressView" destination="unw-05-Hmx" id="tBD-zk-XPw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="454" y="420"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="pause" width="11" height="12"/>
+        <image name="play" width="10" height="12"/>
+    </resources>
+</document>
