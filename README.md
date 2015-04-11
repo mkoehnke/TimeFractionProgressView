@@ -9,7 +9,7 @@ Copy the **TimeFractionProgressView.swift** file to your Swift project, add it t
 # Usage
 The easiest way to get started is to add the TimeFractionProgressView as a custom view in your Storyboard. After that, you set the overall duration and add the number of time fractions, you want to display, in code:
  
-```   
+```swift
 progressView.duration = 30.0
 
 let blue = TimeFraction(color: UIColor.blueColor())
@@ -21,7 +21,7 @@ progressView.insert(green)
 
 To start and stop a time fraction, you simply call the following methods on the relevant object:
 
-```   
+```swift
 blue.start()
 green.stop()
 ```
@@ -31,7 +31,7 @@ The duration of each time fraction can be monitored by observing the duration pr
 ## Custom Graph
 A different appearance can be accomplished by setting **UIBezierPath** to the customPath property.
  
-```
+```swift
 let bezierPath = UIBezierPath(ovalInRect: view.bounds)
 bezierPath.lineWidth = 10
 progressView.customPath = bezierPath
