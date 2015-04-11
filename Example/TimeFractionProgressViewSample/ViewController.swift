@@ -37,7 +37,7 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
         setupCustomProgressView()
         for button in buttons() {
             for progressView in progressViews() {
-                progressView.insert(TimeFraction(color: button.backgroundColor!))
+                progressView.addTimeFraction(TimeFraction(color: button.backgroundColor!))
             }
         }
     }
