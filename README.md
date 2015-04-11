@@ -7,9 +7,11 @@ This is a simple view to display multiple temporal progress graphs at the same t
 Copy the **TimeFractionProgressView.swift** file to your Swift project, add it to your target and you're good to go.
 
 # Usage
-The easiest way to get started is to add the TimeFractionProgressView as a custom view in your Storyboard. After that, you add the number of time fractions, you want to display, in code:
+The easiest way to get started is to add the TimeFractionProgressView as a custom view in your Storyboard. After that, you set the overall duration and add the number of time fractions, you want to display, in code:
  
 ```   
+progressView.duration = 30.0
+
 let blue = TimeFraction(color: UIColor.blueColor())
 progressView.insert(blue)
         
@@ -25,6 +27,15 @@ green.stop()
 ```
 
 The duration of each time fraction can be monitored by observing the duration property using either Key-Value-Observing or a Swift equivalent.
+
+## Custom Graph
+A different appearance can be accomplished by setting **UIBezierPath** to the customPath property.
+ 
+```
+let bezierPath = UIBezierPath(ovalInRect: view.bounds)
+bezierPath.lineWidth = 10
+progressView.customPath = bezierPath
+```
 
 # License
 TimeFractionProgressView is available under the MIT license. See the LICENSE file for more info.
