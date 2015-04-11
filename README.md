@@ -13,10 +13,10 @@ The easiest way to get started is to add the TimeFractionProgressView as a custo
 progressView.duration = 30.0
 
 let blue = TimeFraction(color: UIColor.blueColor())
-progressView.insert(blue)
+progressView.addTimeFraction(blue)
         
 let green = TimeFraction(color: UIColor.greenColor())
-progressView.insert(green)
+progressView.addTimeFraction(green)
 ```
 
 To start and stop a time fraction, you simply call the following methods on the relevant object:
