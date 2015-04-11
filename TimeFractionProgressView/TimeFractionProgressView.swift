@@ -116,7 +116,7 @@ public class TimeFractionProgressView : UIView {
     
     :returns: True, if the insertion was successful.
     */
-    public func insert(timeFraction : TimeFraction) -> Int? {
+    public func addTimeFraction(timeFraction : TimeFraction) -> Int? {
         timeFraction.addObserver(self, forKeyPath: KVOStartedKey, options: .New, context: nil)
         fractions.append(timeFraction)
         setNeedsLayout()
@@ -130,7 +130,7 @@ public class TimeFractionProgressView : UIView {
     
     :returns: True, if the deletion was successful.
     */
-    public func remove(timeFraction : TimeFraction) -> Int? {
+    public func removeTimeFraction(timeFraction : TimeFraction) -> Int? {
         timeFraction.removeObserver(self, forKeyPath: KVOStartedKey, context: nil)
         timeFraction.layer.removeFromSuperlayer()
         timeFraction.layer.path = nil
