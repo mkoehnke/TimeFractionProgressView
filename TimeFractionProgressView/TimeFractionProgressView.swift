@@ -26,7 +26,7 @@ import UIKit
 /**
 *  TimeFraction
 */
-class TimeFraction : NSObject {
+public class TimeFraction : NSObject {
     
     /// The current duration of the time fraction
     private(set) dynamic var duration : NSTimeInterval = 0
@@ -44,7 +44,7 @@ class TimeFraction : NSObject {
     
     :returns: A time fraction instance.
     */
-    required init(color: UIColor) {
+    required public init(color: UIColor) {
         layer = CAShapeLayer()
         layer.strokeColor = color.CGColor
         layer.fillColor = UIColor.clearColor().CGColor
@@ -58,7 +58,7 @@ class TimeFraction : NSObject {
     
     :returns: True, if starting has been successful.
     */
-    func start() -> Bool {
+    public func start() -> Bool {
         if (layer.superlayer == nil) { return false }
         started = true
         return started
@@ -69,7 +69,7 @@ class TimeFraction : NSObject {
     
     :returns: True, if stopping has been successful.
     */
-    func stop() -> Bool {
+    public func stop() -> Bool {
         if (layer.superlayer == nil) { return false }
         started = false
         return true
@@ -78,7 +78,7 @@ class TimeFraction : NSObject {
     /**
     Resets the progress.
     */
-    func reset() {
+    public func reset() {
         stop()
         duration = 0.0
         layer.strokeStart = 0.0
@@ -96,18 +96,18 @@ class TimeFraction : NSObject {
 /**
 *  TimeFractionProgressView
 */
-class TimeFractionProgressView : UIView {
+public class TimeFractionProgressView : UIView {
     
     /// The maximum duration
-    var duration : NSTimeInterval = 30.0
+    public var duration : NSTimeInterval = 30.0
     
     /// The appearance of the progressview can be adjusted by
     /// setting a different bezier path.
-    var customPath : UIBezierPath?
+    public var customPath : UIBezierPath?
     
     /// The delegate will be notified when the maximum duration has 
     /// been reached.
-    var delegate : TimeFractionProgressViewDelegate?
+    public var delegate : TimeFractionProgressViewDelegate?
     
     /**
     Inserts a time fraction into the progressview.
@@ -116,7 +116,7 @@ class TimeFractionProgressView : UIView {
     
     :returns: True, if the insertion was successful.
     */
-    func insert(timeFraction : TimeFraction) -> Int? {
+    public func insert(timeFraction : TimeFraction) -> Int? {
         timeFraction.addObserver(self, forKeyPath: KVOStartedKey, options: .New, context: nil)
         fractions.append(timeFraction)
         setNeedsLayout()
@@ -130,7 +130,7 @@ class TimeFractionProgressView : UIView {
     
     :returns: True, if the deletion was successful.
     */
-    func remove(timeFraction : TimeFraction) -> Int? {
+    public func remove(timeFraction : TimeFraction) -> Int? {
         timeFraction.removeObserver(self, forKeyPath: KVOStartedKey, context: nil)
         timeFraction.layer.removeFromSuperlayer()
         timeFraction.layer.path = nil
@@ -143,7 +143,7 @@ class TimeFractionProgressView : UIView {
     
     :returns: The time fractions count.
     */
-    func numberOfTimeFractions() -> Int {
+    public func numberOfTimeFractions() -> Int {
         return fractions.count
     }
     
@@ -155,7 +155,7 @@ class TimeFractionProgressView : UIView {
     
     :returns: A time fraction.
     */
-    func timeFractionAtPosition(position : Int) -> TimeFraction? {
+    public func timeFractionAtPosition(position : Int) -> TimeFraction? {
         return fractions[position]
     }
     
@@ -167,14 +167,14 @@ class TimeFractionProgressView : UIView {
     
     :returns: The position of the time fraction.
     */
-    func positionOfTimeFraction(timeFraction : TimeFraction) -> Int? {
+    public func positionOfTimeFraction(timeFraction : TimeFraction) -> Int? {
         return find(fractions, timeFraction)
     }
     
     /**
     Resets all time fractions.
     */
-    func reset() {
+    public func reset() {
         for fraction in fractions {
             fraction.reset()
         }
@@ -190,7 +190,7 @@ class TimeFractionProgressView : UIView {
     private var fractions : Array<TimeFraction> = Array()
     private let KVOStartedKey = "started"
     
-    override func layoutSubviews() {
+    override public func layoutSubviews() {
         let oldBounds : CGRect = bounds
         super.layoutSubviews()
         
@@ -253,7 +253,7 @@ class TimeFractionProgressView : UIView {
         startTime = CACurrentMediaTime();
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
+    override public func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
         let started : Bool = change[NSKeyValueChangeNewKey] as! Bool
         if (started && displayLink == nil) {
             startDisplayLink()
@@ -296,7 +296,7 @@ class TimeFractionProgressView : UIView {
 /**
 *  The delegate of the time fraction progressview.
 */
-protocol TimeFractionProgressViewDelegate {
+public protocol TimeFractionProgressViewDelegate {
     func timeFractionProgressViewDidReachMaximumDuration(timeFractionProgressView : TimeFractionProgressView)
 }
 
