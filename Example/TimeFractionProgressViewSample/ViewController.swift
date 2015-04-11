@@ -48,8 +48,8 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
             timeFractions.first!.removeObserver(self, forKeyPath: KVODurationKey, context: nil)
             for timeFraction in timeFractions { timeFraction.stop() }
         } else {
-            for timeFraction in timeFractions { timeFraction.start() }
             timeFractions.first!.addObserver(self, forKeyPath: KVODurationKey, options: .New, context: nil)
+            for timeFraction in timeFractions { timeFraction.start() }
         }
         button.selected = timeFractions.first!.started
     }
