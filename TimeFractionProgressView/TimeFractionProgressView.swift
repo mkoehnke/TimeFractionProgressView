@@ -231,7 +231,12 @@ public class TimeFractionProgressView : UIView {
     // MARK: Private Methods and Declarations
     //
     
-    private var displayLink : CADisplayLink?
+    private lazy var displayLink : CADisplayLink? = {
+        var instance = CADisplayLink(target: self, selector: Selector("animateProgress:"))
+        instance.paused = true
+        instance!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        return instance
+    }()
     private var startTime : CFTimeInterval?
     private var fractions : Array<TimeFraction> = Array()
     private let KVOStartedKey = "started"
@@ -258,21 +263,19 @@ public class TimeFractionProgressView : UIView {
     }
     
     private func startDisplayLink() {
-        if (currentProgress() < 1.0 && displayLink == nil) {
+        if (currentProgress() < 1.0 && displayLink?.paused == true) {
             startTime = CACurrentMediaTime();
-            self.displayLink = CADisplayLink(target: self, selector: Selector("animateProgress:"))
-            self.displayLink!.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+            displayLink?.paused = false
         }
     }
     
     private func stopDisplayLink() {
-        if let _displayLink = self.displayLink {
-            self.displayLink!.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
-            self.displayLink = nil
-        }
+        NSLog("stopped");
+        displayLink?.paused = true
     }
     
     @objc private func animateProgress(displayLink : CADisplayLink) {
+        NSLog("animate");
         if (currentProgress() >= 1.0 || hasStartedFractions() == false) {
             stopDisplayLink()
             stopFractions()
@@ -302,7 +305,7 @@ public class TimeFractionProgressView : UIView {
                 strokeStart = previousFraction.layer.strokeEnd
             }
             
-            if let _displayLink = self.displayLink {
+            if (displayLink?.paused == false) {
                 if (timeFraction.started) { timeFraction.duration += elapsedTime! }
                 timeFraction.layer.strokeStart = strokeStart
                 timeFraction.layer.strokeEnd = strokeStart + CGFloat(Float(timeFraction.duration) / Float(self.duration))
@@ -329,6 +332,9 @@ public class TimeFractionProgressView : UIView {
     }
 
     deinit {
+        displayLink!.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink = nil
+        
         for timeFraction in fractions {
             if (layer.superlayer != nil) {
                 timeFraction.removeObserver(self, forKeyPath: KVOStartedKey, context: nil)
