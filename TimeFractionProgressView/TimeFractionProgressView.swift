@@ -116,7 +116,7 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
     // MARK: Private Methods and Declarations
     //
     
-    private let layer : CAShapeLayer
+    internal let layer : CAShapeLayer
     
     private class func setupLayer(color : UIColor) -> CAShapeLayer {
         let shapeLayer = CAShapeLayer()
@@ -275,7 +275,6 @@ public class TimeFractionProgressView : UIView {
     }
     
     @objc private func animateProgress(displayLink : CADisplayLink) {
-        NSLog("animate");
         if (currentProgress() >= 1.0 || hasStartedFractions() == false) {
             stopDisplayLink()
             stopFractions()
@@ -350,7 +349,7 @@ public class TimeFractionProgressView : UIView {
 /**
 *  The delegate of the time fraction progressview.
 */
-public protocol TimeFractionProgressViewDelegate {
+@objc public protocol TimeFractionProgressViewDelegate {
     func timeFractionProgressViewDidReachMaximumDuration(timeFractionProgressView : TimeFractionProgressView)
 }
 
