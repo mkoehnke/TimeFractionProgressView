@@ -156,7 +156,7 @@ public class TimeFractionProgressView : UIView {
     public func addTimeFraction(timeFraction : TimeFraction) -> Int {
         timeFraction.addObserver(self, forKeyPath: KVOStartedKey, options: .New, context: nil)
         fractions.append(timeFraction)
-        setNeedsLayout()
+        createLayerPath(timeFraction)
         if (timeFraction.started) { startDisplayLink() } else { updateAppearance(nil) }
         return count(fractions)
     }
@@ -230,7 +230,7 @@ public class TimeFractionProgressView : UIView {
     //
     // MARK: Private Methods and Declarations
     //
-    
+    internal var fractions : Array<TimeFraction> = Array()
     private lazy var displayLink : CADisplayLink? = {
         var instance = CADisplayLink(target: self, selector: Selector("animateProgress:"))
         instance.paused = true
@@ -238,28 +238,31 @@ public class TimeFractionProgressView : UIView {
         return instance
     }()
     private var startTime : CFTimeInterval?
-    private var fractions : Array<TimeFraction> = Array()
     private let KVOStartedKey = "started"
     
     override public func layoutSubviews() {
         let oldBounds : CGRect = bounds
         super.layoutSubviews()
-        
-        for fraction in fractions {
-            if (fraction.layer.superlayer == nil || fraction.layer.path == nil || !CGRectEqualToRect(oldBounds, bounds)) {
-                if let _customPath = self.customPath {
-                    fraction.layer.path = _customPath.copy().CGPath
-                    fraction.layer.lineWidth = _customPath.lineWidth
-                } else {
-                    let path = UIBezierPath()
-                    path.moveToPoint(CGPoint(x: 0, y: bounds.size.height / 2.0))
-                    path.addLineToPoint(CGPoint(x: bounds.size.width, y: bounds.size.height / 2.0))
-                    fraction.layer.path = path.CGPath
-                    fraction.layer.lineWidth = bounds.size.height
-                }
-                layer.addSublayer(fraction.layer)
+        if !CGRectEqualToRect(oldBounds, bounds) {
+            for fraction in fractions {
+                createLayerPath(fraction)
             }
         }
+    }
+    
+    private func createLayerPath(timeFraction : TimeFraction) {
+        timeFraction.layer.removeFromSuperlayer()
+        if let _customPath = self.customPath {
+            timeFraction.layer.path = _customPath.copy().CGPath
+            timeFraction.layer.lineWidth = _customPath.lineWidth
+        } else {
+            let path = UIBezierPath()
+            path.moveToPoint(CGPoint(x: 0, y: bounds.size.height / 2.0))
+            path.addLineToPoint(CGPoint(x: bounds.size.width, y: bounds.size.height / 2.0))
+            timeFraction.layer.path = path.CGPath
+            timeFraction.layer.lineWidth = bounds.size.height
+        }
+        layer.addSublayer(timeFraction.layer)
     }
     
     private func startDisplayLink() {
