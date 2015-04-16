@@ -245,12 +245,9 @@ public class TimeFractionProgressView : UIView {
     private let KVOStartedKey = "started"
     
     override public func layoutSubviews() {
-        let oldBounds : CGRect = bounds
         super.layoutSubviews()
-        if !CGRectEqualToRect(oldBounds, bounds) {
-            for fraction in fractions {
-                createLayerPath(fraction)
-            }
+        for fraction in fractions {
+            createLayerPath(fraction)
         }
     }
     
@@ -277,7 +274,6 @@ public class TimeFractionProgressView : UIView {
     }
     
     private func stopDisplayLink() {
-        NSLog("stopped");
         displayLink?.paused = true
     }
     
