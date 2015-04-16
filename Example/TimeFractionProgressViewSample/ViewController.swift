@@ -29,8 +29,9 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
     @IBOutlet weak var button3: UIButton!
     @IBOutlet weak var defaultProgressView: TimeFractionProgressView!
     @IBOutlet weak var customProgressView: TimeFractionProgressView!
+    @IBOutlet weak var progressLabel: UILabel!
     
-    let KVODurationKey = "duration"
+    let KVOProgressKey = "progress"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,13 +43,23 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
         }
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        progressViews().first?.addObserver(self, forKeyPath: KVOProgressKey, options: .New, context: nil)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        progressViews().first?.removeObserver(self, forKeyPath: KVOProgressKey, context: nil)
+    }
+    
     @IBAction func buttonTouched(button : UIButton) {
         let timeFractions = timeFractionsAtPosition(button.tag - 1)
         if (timeFractions.first!.started) {
-            timeFractions.first!.removeObserver(self, forKeyPath: KVODurationKey, context: nil)
+            timeFractions.first!.removeObserver(self, forKeyPath: KVOProgressKey, context: nil)
             for timeFraction in timeFractions { timeFraction.stop() }
         } else {
-            timeFractions.first!.addObserver(self, forKeyPath: KVODurationKey, options: .New, context: nil)
+            timeFractions.first!.addObserver(self, forKeyPath: KVOProgressKey, options: .New, context: nil)
             for timeFraction in timeFractions { timeFraction.start() }
         }
         button.selected = timeFractions.first!.started
@@ -56,10 +67,14 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
         let progress : Float? = change[NSKeyValueChangeNewKey] as? Float
-        let index = progressViews().first?.positionOfTimeFraction(object as! TimeFraction)
-        if let _index = index, _progress = progress {
-            let title = NSString(format: "%.1f", _progress)
-            buttons()[_index].setTitle(title as String, forState: .Normal)
+        if let _timeFraction = object as? TimeFraction {
+            let index = progressViews().first?.positionOfTimeFraction(_timeFraction)
+            if let _index = index, _progress = progress {
+                let title = NSString(format: "%.1f", _progress)
+                buttons()[_index].setTitle(title as String, forState: .Normal)
+            }
+        } else if let _progressView = object as? TimeFractionProgressView, _progress = progress {
+            progressLabel.text = NSString(format: "%.1f", _progress) as String
         }
     }
     
