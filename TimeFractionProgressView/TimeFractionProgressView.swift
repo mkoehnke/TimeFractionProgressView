@@ -147,7 +147,7 @@ public class TimeFractionProgressView : UIView {
     
     /// The delegate will be notified when the maximum duration has 
     /// been reached.
-    public var delegate : TimeFractionProgressViewDelegate?
+    public weak var delegate : TimeFractionProgressViewDelegate?
     
     /**
     Inserts a time fraction into the progressview.
