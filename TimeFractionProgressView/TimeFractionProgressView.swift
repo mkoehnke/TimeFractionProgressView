@@ -310,8 +310,10 @@ public class TimeFractionProgressView : UIView {
             
             if (displayLink?.paused == false) {
                 if (timeFraction.started) { timeFraction.progress += elapsedTime! }
+                CATransaction.setDisableActions(true)
                 timeFraction.layer.strokeStart = strokeStart
                 timeFraction.layer.strokeEnd = strokeStart + CGFloat(Float(timeFraction.progress) / Float(self.duration))
+                CATransaction.setDisableActions(false)
                 overallProgress += timeFraction.progress
             }
         }
