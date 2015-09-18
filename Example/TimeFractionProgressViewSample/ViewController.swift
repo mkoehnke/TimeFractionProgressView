@@ -65,16 +65,17 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
         button.selected = timeFractions.first!.started
     }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject: AnyObject], context: UnsafeMutablePointer<Void>) {
-        let progress : Float? = change[NSKeyValueChangeNewKey] as? Float
-        if let _timeFraction = object as? TimeFraction {
-            let index = progressViews().first?.positionOfTimeFraction(_timeFraction)
-            if let _index = index, _progress = progress {
-                let title = NSString(format: "%.1f", _progress)
-                buttons()[_index].setTitle(title as String, forState: .Normal)
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if let _progress = change?[NSKeyValueChangeNewKey] as? Float {
+            if let _timeFraction = object as? TimeFraction {
+                let index = progressViews().first?.positionOfTimeFraction(_timeFraction)
+                if let _index = index {
+                    let title = NSString(format: "%.1f", _progress)
+                    buttons()[_index].setTitle(title as String, forState: .Normal)
+                }
+            } else if let _ = object as? TimeFractionProgressView {
+                progressLabel.text = NSString(format: "%.1f", _progress) as String
             }
-        } else if let _progressView = object as? TimeFractionProgressView, _progress = progress {
-            progressLabel.text = NSString(format: "%.1f", _progress) as String
         }
     }
     
