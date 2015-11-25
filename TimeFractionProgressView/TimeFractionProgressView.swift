@@ -236,17 +236,33 @@ public class TimeFractionProgressView : UIView {
     }
     
     //
+    // MARK: Initializers
+    //
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonSetup()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonSetup()
+    }
+    
+    
+    //
     // MARK: Private Methods and Declarations
     //
     internal var fractions : Array<TimeFraction> = Array()
-    private lazy var displayLink : CADisplayLink? = {
-        var instance = CADisplayLink(target: self, selector: Selector("animateProgress:"))
-        instance.paused = true
-        instance.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
-        return instance
-    }()
+    private var displayLink : CADisplayLink?
     private var startTime : CFTimeInterval?
     private let KVOStartedKey = "started"
+    
+    private func commonSetup() {
+        let displayLink = CADisplayLink(target: self, selector: Selector("animateProgress:"))
+        displayLink.paused = true
+        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        self.displayLink = displayLink
+    }
     
     override public func layoutSubviews() {
         super.layoutSubviews()
@@ -340,7 +356,7 @@ public class TimeFractionProgressView : UIView {
     }
 
     deinit {
-        displayLink!.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink?.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         displayLink = nil
         
         for timeFraction in fractions {
