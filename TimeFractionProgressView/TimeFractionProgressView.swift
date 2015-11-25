@@ -248,7 +248,6 @@ public class TimeFractionProgressView : UIView {
         commonSetup()
     }
     
-    
     //
     // MARK: Private Methods and Declarations
     //
