@@ -257,7 +257,7 @@ public class TimeFractionProgressView : UIView {
     private let KVOStartedKey = "started"
     
     private func commonSetup() {
-        let displayLink = CADisplayLink(target: self, selector: Selector("animateProgress:"))
+        let displayLink = CADisplayLink(target: self, selector: #selector(TimeFractionProgressView.animateProgress(_:)))
         displayLink.paused = true
         displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
         self.displayLink = displayLink
@@ -297,10 +297,14 @@ public class TimeFractionProgressView : UIView {
     }
     
     @objc private func animateProgress(displayLink : CADisplayLink) {
-        if (currentProgress() >= 1.0 || hasStartedFractions() == false) {
+        let hasReachedMaximumDuration = currentProgress() >= 1.0
+        let shouldStop = hasReachedMaximumDuration || hasStartedFractions() == false
+        if (shouldStop) {
             stopDisplayLink()
             stopFractions()
-            delegate?.timeFractionProgressViewDidReachMaximumDuration(self)
+            if hasReachedMaximumDuration {
+                delegate?.timeFractionProgressViewDidReachMaximumDuration(self)
+            }
             return
         }
         
