@@ -33,45 +33,47 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
     
     let KVOProgressKey = "progress"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupCustomProgressView()
-        for button in buttons() {
-            for progressView in progressViews() {
-                progressView.addTimeFraction(TimeFraction(color: button.backgroundColor!))
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if customProgressView.customPath == nil {
+            setupCustomProgressView()
+            for button in buttons() {
+                for progressView in progressViews() {
+                    progressView.addTimeFraction(TimeFraction(color: button.backgroundColor!))
+                }
             }
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        progressViews().first?.addObserver(self, forKeyPath: KVOProgressKey, options: .New, context: nil)
+        progressViews().first?.addObserver(self, forKeyPath: KVOProgressKey, options: .new, context: nil)
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         progressViews().first?.removeObserver(self, forKeyPath: KVOProgressKey, context: nil)
     }
     
-    @IBAction func buttonTouched(button : UIButton) {
+    @IBAction func buttonTouched(_ button : UIButton) {
         let timeFractions = timeFractionsAtPosition(button.tag - 1)
         if (timeFractions.first!.started) {
             timeFractions.first!.removeObserver(self, forKeyPath: KVOProgressKey, context: nil)
             for timeFraction in timeFractions { timeFraction.stop() }
         } else {
-            timeFractions.first!.addObserver(self, forKeyPath: KVOProgressKey, options: .New, context: nil)
+            timeFractions.first!.addObserver(self, forKeyPath: KVOProgressKey, options: .new, context: nil)
             for timeFraction in timeFractions { timeFraction.start() }
         }
-        button.selected = timeFractions.first!.started
+        button.isSelected = timeFractions.first!.started
     }
     
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if let _progress = change?[NSKeyValueChangeNewKey] as? Float {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if let _progress = change?[NSKeyValueChangeKey.newKey] as? Float {
             if let _timeFraction = object as? TimeFraction {
                 let index = progressViews().first?.positionOfTimeFraction(_timeFraction)
                 if let _index = index {
                     let title = NSString(format: "%.1f", _progress)
-                    buttons()[_index].setTitle(title as String, forState: .Normal)
+                    buttons()[_index].setTitle(title as String, for: UIControlState())
                 }
             } else if let _ = object as? TimeFractionProgressView {
                 progressLabel.text = NSString(format: "%.1f", _progress) as String
@@ -79,15 +81,15 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
         }
     }
     
-    private func progressViews() -> Array<TimeFractionProgressView> {
+    fileprivate func progressViews() -> Array<TimeFractionProgressView> {
         return [customProgressView, defaultProgressView]
     }
     
-    private func buttons() -> Array<UIButton> {
+    fileprivate func buttons() -> Array<UIButton> {
         return [button1, button2, button3]
     }
     
-    private func timeFractionsAtPosition(position : Int) -> Array<TimeFraction> {
+    fileprivate func timeFractionsAtPosition(_ position : Int) -> Array<TimeFraction> {
         var fractions = Array<TimeFraction>()
         for progressView in progressViews() {
             fractions.append(progressView.timeFractionAtPosition(position)!)
@@ -95,11 +97,11 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
         return fractions
     }
     
-    private func setupCustomProgressView() {
+    fileprivate func setupCustomProgressView() {
         let lineWidth : CGFloat = 10.0
         let width = customProgressView.bounds.size.width - lineWidth
         let height = customProgressView.bounds.size.height - lineWidth
-        let bezierPath = UIBezierPath(ovalInRect: CGRectMake(lineWidth/2, lineWidth/2, width, height))
+        let bezierPath = UIBezierPath(ovalIn: CGRect(x: lineWidth/2, y: lineWidth/2, width: width, height: height))
         bezierPath.lineWidth = lineWidth
         customProgressView.customPath = bezierPath
         customProgressView.delegate = self
@@ -108,13 +110,13 @@ class ViewController: UIViewController, TimeFractionProgressViewDelegate {
     
     // MARK: TimeFractionProgressViewDelegate
     
-    func timeFractionProgressViewDidReachMaximumDuration(timeFractionProgressView: TimeFractionProgressView) {
-        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
-        dispatch_after(delayTime, dispatch_get_main_queue()) {
+    func timeFractionProgressViewDidReachMaximumDuration(_ timeFractionProgressView: TimeFractionProgressView) {
+        let delayTime = DispatchTime.now() + Double(Int64(1 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        DispatchQueue.main.asyncAfter(deadline: delayTime) {
             for progressView in self.progressViews() { progressView.reset() }
             for button in self.buttons() {
-                button.selected = false
-                button.setTitle("0.0", forState: .Normal)
+                button.isSelected = false
+                button.setTitle("0.0", for: UIControlState())
             }
         }
     }
