@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "TimeFractionProgressView"
-  s.version      = "1.1.1"
+  s.version      = "1.5.0"
   s.summary      = "Easy to use iOS view for displaying multiple temporal progress graphs."
 
   s.description  = <<-DESC

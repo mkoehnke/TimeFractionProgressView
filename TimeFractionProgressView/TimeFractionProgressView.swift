@@ -26,18 +26,18 @@ import UIKit
 /**
 *  TimeFraction
 */
-public class TimeFraction : NSObject, NSCoding, NSCopying {
+open class TimeFraction : NSObject, NSCoding, NSCopying {
     
     /// The current progress of the time fraction in seconds
-    private(set) public dynamic var progress : NSTimeInterval = 0.0
+    fileprivate(set) open dynamic var progress : TimeInterval = 0.0
     
     /// Determines if the time fraction has been started
-    private(set) public dynamic var started : Bool = false
+    fileprivate(set) open dynamic var started : Bool = false
     
     /// The progress color of the time fraction
-    public var color : UIColor = UIColor.whiteColor() {
+    open var color : UIColor = UIColor.white {
         didSet {
-            layer.strokeColor = color.CGColor
+            layer.strokeColor = color.cgColor
             layer.setNeedsDisplay()
         }
     }
@@ -59,7 +59,8 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
     
     - returns: True, if starting has been successful.
     */
-    public func start() -> Bool {
+    @discardableResult
+    open func start() -> Bool {
         if (layer.superlayer == nil) { return false }
         started = true
         return started
@@ -70,7 +71,8 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
     
     - returns: True, if stopping has been successful.
     */
-    public func stop() -> Bool {
+    @discardableResult
+    open func stop() -> Bool {
         if (layer.superlayer == nil) { return false }
         started = false
         return true
@@ -79,7 +81,7 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
     /**
     Resets the progress.
     */
-    public func reset() {
+    open func reset() {
         stop()
         progress = 0.0
         layer.strokeStart = 0.0
@@ -90,22 +92,22 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
     // MARK: Coding
     //
     public required init?(coder aDecoder: NSCoder) {
-        progress = aDecoder.decodeObjectForKey("progress") as! NSTimeInterval
-        color = aDecoder.decodeObjectForKey("color") as! UIColor
-        started = aDecoder.decodeObjectForKey("started") as! Bool
+        progress = aDecoder.decodeObject(forKey: "progress") as! TimeInterval
+        color = aDecoder.decodeObject(forKey: "color") as! UIColor
+        started = aDecoder.decodeObject(forKey: "started") as! Bool
         layer = TimeFraction.setupLayer(color)
     }
     
-    public func encodeWithCoder(aCoder: NSCoder) {
-        aCoder.encodeObject(progress, forKey: "progress")
-        aCoder.encodeObject(color, forKey: "color")
-        aCoder.encodeObject(started, forKey: "started")
+    open func encode(with aCoder: NSCoder) {
+        aCoder.encode(progress, forKey: "progress")
+        aCoder.encode(color, forKey: "color")
+        aCoder.encode(started, forKey: "started")
     }
     
     //
     // MARK: Copying
     //
-    public func copyWithZone(zone: NSZone) -> AnyObject {
+    open func copy(with zone: NSZone?) -> Any {
         let timeFraction = TimeFraction(color: color)
         timeFraction.progress = progress
         timeFraction.started = started
@@ -118,11 +120,11 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
     
     internal let layer : CAShapeLayer
     
-    private class func setupLayer(color : UIColor) -> CAShapeLayer {
+    fileprivate class func setupLayer(_ color : UIColor) -> CAShapeLayer {
         let shapeLayer = CAShapeLayer()
-        shapeLayer.strokeColor = color.CGColor
-        shapeLayer.fillColor = UIColor.clearColor().CGColor
-        shapeLayer.backgroundColor = UIColor.clearColor().CGColor
+        shapeLayer.strokeColor = color.cgColor
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.backgroundColor = UIColor.clear.cgColor
         shapeLayer.strokeStart = 0.0
         shapeLayer.strokeEnd = 0.0
         return shapeLayer
@@ -133,31 +135,32 @@ public class TimeFraction : NSObject, NSCoding, NSCopying {
 /**
 *  TimeFractionProgressView
 */
-public class TimeFractionProgressView : UIView {
+open class TimeFractionProgressView : UIView {
     
     /// The maximum duration in seconds
-    public var duration : NSTimeInterval = 30.0
+    open var duration : TimeInterval = 30.0
     
     // The overall progress in seconds
-    private(set) public dynamic var progress : NSTimeInterval = 0.0
+    fileprivate(set) open dynamic var progress : TimeInterval = 0.0
     
     /// The appearance of the progressview can be adjusted by
     /// setting a different bezier path.
-    public var customPath : UIBezierPath?
+    open var customPath : UIBezierPath?
     
     /// The delegate will be notified when the maximum duration has 
     /// been reached.
-    public weak var delegate : TimeFractionProgressViewDelegate?
+    open weak var delegate : TimeFractionProgressViewDelegate?
     
     /**
     Inserts a time fraction into the progressview.
     
     - parameter timeFraction: The time fraction.
     
-    - returns: True, if the insertion was successful.
+    - returns: The current number of fractions.
     */
-    public func addTimeFraction(timeFraction : TimeFraction) -> Int {
-        timeFraction.addObserver(self, forKeyPath: KVOStartedKey, options: .New, context: nil)
+    @discardableResult
+    open func addTimeFraction(_ timeFraction : TimeFraction) -> Int {
+        timeFraction.addObserver(self, forKeyPath: KVOStartedKey, options: .new, context: nil)
         fractions.append(timeFraction)
         createLayerPath(timeFraction)
         if (timeFraction.started) { startDisplayLink() } else { updateAppearance(nil) }
@@ -169,12 +172,13 @@ public class TimeFractionProgressView : UIView {
     
     - parameter timeFraction: The time fraction.
     
-    - returns: True, if the deletion was successful.
+    - returns: The current number of fractions.
     */
-    public func removeTimeFraction(timeFraction : TimeFraction) -> Int {
-        if let index = fractions.indexOf(timeFraction) {
+    @discardableResult
+    open func removeTimeFraction(_ timeFraction : TimeFraction) -> Int {
+        if let index = fractions.index(of: timeFraction) {
             timeFraction.stop()
-            fractions.removeAtIndex(index)
+            fractions.remove(at: index)
             timeFraction.removeObserver(self, forKeyPath: KVOStartedKey, context: nil)
             timeFraction.layer.removeFromSuperlayer()
             timeFraction.layer.path = nil
@@ -189,7 +193,7 @@ public class TimeFractionProgressView : UIView {
     
     - returns: The time fractions count.
     */
-    public func numberOfTimeFractions() -> Int {
+    open func numberOfTimeFractions() -> Int {
         return fractions.count
     }
     
@@ -201,7 +205,7 @@ public class TimeFractionProgressView : UIView {
     
     - returns: A time fraction.
     */
-    public func timeFractionAtPosition(position : Int) -> TimeFraction? {
+    open func timeFractionAtPosition(_ position : Int) -> TimeFraction? {
         return fractions[position]
     }
     
@@ -213,8 +217,8 @@ public class TimeFractionProgressView : UIView {
     
     - returns: The position of the time fraction.
     */
-    public func positionOfTimeFraction(timeFraction : TimeFraction) -> Int {
-        if let index = fractions.indexOf(timeFraction) {
+    open func positionOfTimeFraction(_ timeFraction : TimeFraction) -> Int {
+        if let index = fractions.index(of: timeFraction) {
             return index
         }
         return -1
@@ -223,14 +227,14 @@ public class TimeFractionProgressView : UIView {
     /**
     Resets all time fractions.
     */
-    public func reset() {
+    open func reset() {
         progress = 0.0
         for fraction in fractions {
             fraction.reset()
         }
     }
     
-    public override func setNeedsDisplay() {
+    open override func setNeedsDisplay() {
         super.setNeedsDisplay()
         updateAppearance(0)
     }
@@ -252,51 +256,51 @@ public class TimeFractionProgressView : UIView {
     // MARK: Private Methods and Declarations
     //
     internal var fractions : Array<TimeFraction> = Array()
-    private var displayLink : CADisplayLink?
-    private var startTime : CFTimeInterval?
-    private let KVOStartedKey = "started"
+    fileprivate var displayLink : CADisplayLink?
+    fileprivate var startTime : CFTimeInterval?
+    fileprivate let KVOStartedKey = "started"
     
-    private func commonSetup() {
+    fileprivate func commonSetup() {
         let displayLink = CADisplayLink(target: self, selector: #selector(TimeFractionProgressView.animateProgress(_:)))
-        displayLink.paused = true
-        displayLink.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink.isPaused = true
+        displayLink.add(to: RunLoop.main, forMode: RunLoopMode.commonModes)
         self.displayLink = displayLink
     }
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         for fraction in fractions {
             createLayerPath(fraction)
         }
     }
     
-    private func createLayerPath(timeFraction : TimeFraction) {
+    fileprivate func createLayerPath(_ timeFraction : TimeFraction) {
         timeFraction.layer.removeFromSuperlayer()
         if let _customPath = self.customPath {
-            timeFraction.layer.path = _customPath.copy().CGPath
+            timeFraction.layer.path = (_customPath.copy() as AnyObject).cgPath
             timeFraction.layer.lineWidth = _customPath.lineWidth
         } else {
             let path = UIBezierPath()
-            path.moveToPoint(CGPoint(x: 0, y: bounds.size.height / 2.0))
-            path.addLineToPoint(CGPoint(x: bounds.size.width, y: bounds.size.height / 2.0))
-            timeFraction.layer.path = path.CGPath
+            path.move(to: CGPoint(x: 0, y: bounds.size.height / 2.0))
+            path.addLine(to: CGPoint(x: bounds.size.width, y: bounds.size.height / 2.0))
+            timeFraction.layer.path = path.cgPath
             timeFraction.layer.lineWidth = bounds.size.height
         }
         layer.addSublayer(timeFraction.layer)
     }
     
-    private func startDisplayLink() {
-        if (currentProgress() < 1.0 && displayLink?.paused == true) {
+    fileprivate func startDisplayLink() {
+        if (currentProgress() < 1.0 && displayLink?.isPaused == true) {
             startTime = CACurrentMediaTime();
-            displayLink?.paused = false
+            displayLink?.isPaused = false
         }
     }
     
-    private func stopDisplayLink() {
-        displayLink?.paused = true
+    fileprivate func stopDisplayLink() {
+        displayLink?.isPaused = true
     }
     
-    @objc private func animateProgress(displayLink : CADisplayLink) {
+    @objc fileprivate func animateProgress(_ displayLink : CADisplayLink) {
         let hasReachedMaximumDuration = currentProgress() >= 1.0
         let shouldStop = hasReachedMaximumDuration || hasStartedFractions() == false
         if (shouldStop) {
@@ -313,17 +317,17 @@ public class TimeFractionProgressView : UIView {
         startTime = CACurrentMediaTime();
     }
     
-    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if let _ = change?[NSKeyValueChangeNewKey] as? Bool {
+    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        if let _ = change?[NSKeyValueChangeKey.newKey] as? Bool {
             startDisplayLink()
         } else if (hasStartedFractions() == false) {
             stopDisplayLink()
         }
     }
     
-    private func updateAppearance(elapsedTime : CFTimeInterval?) {
-        var overallProgress : NSTimeInterval = 0.0
-        for (index, timeFraction) in fractions.enumerate() {
+    fileprivate func updateAppearance(_ elapsedTime : CFTimeInterval?) {
+        var overallProgress : TimeInterval = 0.0
+        for (index, timeFraction) in fractions.enumerated() {
             var strokeStart : CGFloat = 0.0
             if (index > 0) {
                 let previousFraction = fractions[index-1]
@@ -340,26 +344,26 @@ public class TimeFractionProgressView : UIView {
         progress = overallProgress
     }
     
-    private func hasStartedFractions() -> Bool {
+    fileprivate func hasStartedFractions() -> Bool {
         for timeFraction in fractions {
             if (timeFraction.started) { return true }
         }
         return false;
     }
     
-    private func currentProgress() -> CGFloat {
+    fileprivate func currentProgress() -> CGFloat {
         if let lastTimeFraction = fractions.last {
             return lastTimeFraction.layer.strokeEnd
         }
         return 0.0
     }
     
-    private func stopFractions() {
+    fileprivate func stopFractions() {
         for timeFraction in fractions { timeFraction.started = false }
     }
 
     deinit {
-        displayLink?.removeFromRunLoop(NSRunLoop.mainRunLoop(), forMode: NSRunLoopCommonModes)
+        displayLink?.remove(from: RunLoop.main, forMode: RunLoopMode.commonModes)
         displayLink = nil
         
         for timeFraction in fractions {
@@ -378,7 +382,7 @@ public class TimeFractionProgressView : UIView {
 *  The delegate of the time fraction progressview.
 */
 @objc public protocol TimeFractionProgressViewDelegate {
-    func timeFractionProgressViewDidReachMaximumDuration(timeFractionProgressView : TimeFractionProgressView)
+    func timeFractionProgressViewDidReachMaximumDuration(_ timeFractionProgressView : TimeFractionProgressView)
 }
 
 
